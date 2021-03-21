@@ -465,7 +465,7 @@ touch .eslintrc
 {
   "parser": "babel-eslint",
   "extends": ["airbnb"],
-  "ignorePatterns": ["webpack.config.js"],
+  "ignorePatterns": ["webpack.config.js", "postcss.config.js"],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-unused-vars": 0,
