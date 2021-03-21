@@ -3,6 +3,8 @@
   "extends": ["airbnb"],
   "ignorePatterns": ["webpack.config.js"],
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-unused-vars": 0,
+    "react/prop-types": 0
   }
 }
