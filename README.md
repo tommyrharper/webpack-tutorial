@@ -281,3 +281,231 @@ module.exports = {
 ```
 npm run develop
 ```
+
+- You should now be able to modify CSS in the browser, then edit App.js, causing a hot re-render without losing the CSS changes in the browser.
+
+## Configuring MiniCssExtractPlugin to write CSS Files
+
+```
+npm i mini-css-extract-plugin css-loader
+```
+
+- Update webpack config:
+```JavaScript
+const path = require('path')
+const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = env => {
+  return {
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: '[name].bundle.css',
+        chunkFilename: '[id].css'
+      }),
+      new webpack.HotModuleReplacementPlugin()
+    ],
+    entry: path.resolve(__dirname, 'src', 'index.js'),
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'bundle.js'
+    },
+    devServer: {
+      contentBase: path.resolve(__dirname, 'dist'),
+      open: true,
+      clientLogLevel: 'silent',
+      port: 9000,
+      historyApiFallback: true,
+      hot: true
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(jsx|js)$/,
+          include: path.resolve(__dirname, 'src'),
+          exclude: /node_modules/,
+          use: [{
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                ['@babel/preset-env', {
+                  "targets": "defaults" 
+                }],
+                '@babel/preset-react'
+              ]
+            }
+          }]
+        },
+        {
+          test: /\.css$/i,
+          include: path.resolve(__dirname, 'src'),
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 0 
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+- Update `package.json`:
+```JSON
+//...
+"scripts": {
+  "develop": "webpack serve --env NODE_ENV=development --mode development",
+},
+//...
+```
+
+- Create a CSS file:
+
+```
+touch src/index.css
+```
+- Import `index.css` into `index.js`
+```JavaScript
+import './index.css'
+```
+
+- Update `index.html`
+
+```HTML
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Complete React Webpack Configuration</title>
+  <link rel="stylesheet" type="text/css" href="/main.bundle.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="/bundle.js" async defer></script>
+</body>
+
+</html>
+```
+
+## Adding PostCSS and PostCSS plugins to your Webpack Config
+
+```
+npm i postcss-loader
+```
+
+- Update webpack config:
+
+```JavaScript
+{
+  test: /\.css$/i,
+  include: path.resolve(__dirname, 'src'),
+  exclude: /node_modules/,
+  use: [
+    {
+      loader: MiniCssExtractPlugin.loader,
+    },
+    {
+      loader: 'css-loader',
+      options: {
+        importLoaders: 1 
+      }
+    },
+    'postcss-loader'
+  ]
+}
+```
+
+```
+npm install autoprefixer
+touch postcss.config.js
+```
+
+- Add to `postcss.config.js`
+```JavaScript
+module.exports = {
+  plugins: [
+    require('autoprefixer')
+  ]
+}
+```
+
+- Update `index.css`:
+```CSS
+body {
+  background:#eeeeee; 
+}
+
+::placeholder {
+  color: gray;
+}
+```
+
+## Adding ESLint to your JavaScript and JSX files
+
+```
+npm i eslint-loader
+npm i --save-dev babel-eslint
+npx install-peerdeps --dev eslint-config-airbnb
+touch .eslintrc
+```
+
+- In `.eslintrc`
+```
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb"],
+  "ignorePatterns": ["webpack.config.js"],
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-unused-vars": 0,
+    "react/prop-types": 0
+  }
+}
+```
+
+- Then update webpack config:
+
+```JavaScript
+//...
+rules: [
+  {
+    test: /\.(jsx|js)$/,
+    include: path.resolve(__dirname, 'src'),
+    exclude: /node_modules/,
+    use: [{
+      loader: 'babel-loader',
+      options: {
+        presets: [
+          ['@babel/preset-env', {
+            "targets": "defaults" 
+          }],
+          '@babel/preset-react'
+        ]
+      }
+    }, {
+      loader: 'eslint-loader',
+      options: {
+        fix: true
+      }
+    }]
+  }
+  //...
+```
+
+- Add the following rule to `index.js`:
+```JavaScript
+/* eslint-disable no-undef */
+```
+
+- Now we are done!
