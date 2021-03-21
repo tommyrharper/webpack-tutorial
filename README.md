@@ -1,5 +1,7 @@
 # Webpack Tutorial
 
+https://hashinteractive.com/blog/complete-guide-to-webpack-configuration-for-react
+
 ```
 git init
 echo 'node_modules\ndist/bundle.js*' >> .gitignore
