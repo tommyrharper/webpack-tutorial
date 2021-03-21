@@ -42,6 +42,11 @@ module.exports = env => {
                 '@babel/preset-react'
               ]
             }
+          }, {
+            loader: 'eslint-loader',
+            options: {
+              fix: true
+            }
           }]
         },
         {
