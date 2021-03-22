@@ -167,7 +167,7 @@ ReactDOM.render(
   "main": "index.js",
   "scripts": {
     "develop": "webpack serve --env NODE_ENV=development --mode development",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   //...
 }
@@ -219,7 +219,100 @@ module.exports = {
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-unused-vars": 0,
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "no-console": 0,
+    "quotes": 0,
+    "camelcase": 0,
+    "comma-dangle": 0,
+    "no-plusplus": 0,
+    "no-restricted-syntax": 0
+  },
+  "env": {
+    "browser": true,
+    "jest": true
   }
 }
+```
+
+## Further additions
+
+```
+npm install --save styled-components
+// add jest
+mkdir src/__tests__
+touch src/__tests__/App.test.js
+npm install --save-dev jest
+// To test React components
+npm install --save-dev babel-jest babel-polyfill
+npm install --save-dev jest babel-jest babel-preset-es2015 babel-preset-react react-test-renderer
+npm i --save-dev enzyme
+touch .babelrc
+npm install babel-core@7.0.0-bridge.0 --save-dev
+npm install enzyme-adapter-react-16
+touch ./src/setupTests.js
+// optional
+npm install --save @testing-library/react @testing-library/jest-dom
+// testing fetch
+npm install react-test-renderer fetch-mock @testing-library/react-hooks whatwg-fetch
+npm install node-fetch
+// allow async hooks -> install this and update babel config plugins
+npm install @babel/plugin-transform-runtime
+```
+
+- Update `package.json`:
+```JSON
+{
+    ...,
+    "jest": {
+        "setupFilesAfterEnv": ["./src/setupTests.js"]
+    }
+}
+```
+
+## App.test.js
+
+```JavaScript
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { shallow, configure } from 'enzyme';
+import App from '../components/App';
+
+const sum = (a, b) => a + b;
+
+it('sums numbers', () => {
+  expect(sum(1, 2)).toEqual(3);
+  expect(sum(2, 2)).toEqual(4);
+});
+
+it('renders without crashing', () => {
+  const div = document.createElement('div');
+  ReactDOM.render(<App />, div);
+  shallow(<App />);
+});
+```
+
+## .babelrc
+
+```
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-transform-runtime"
+  ]
+}
+```
+
+## setupTests.js
+
+```JavaScript
+// Add this line for fetch testing
+import 'regenerator-runtime/runtime';
+// Standard
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
 ```
