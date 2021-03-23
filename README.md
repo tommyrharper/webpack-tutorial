@@ -185,7 +185,7 @@ module.exports = {
   "description": "",
   "main": "index.js",
   "scripts": {
-    "develop": "webpack serve",
+    "dev": "webpack serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   //...
@@ -195,7 +195,7 @@ module.exports = {
 ### Start the server
 
 ```
-npm run develop
+npm run dev
 ```
 
 ## Webpack Dev Server Hot Module Replacement (HMR)
@@ -281,7 +281,7 @@ module.exports = {
 
 - Restart your webpack server:
 ```
-npm run develop
+npm run dev
 ```
 
 - You should now be able to modify CSS in the browser, then edit App.js, causing a hot re-render without losing the CSS changes in the browser.
@@ -364,7 +364,7 @@ module.exports = env => {
 ```JSON
 //...
 "scripts": {
-  "develop": "webpack serve --env NODE_ENV=development --mode development",
+  "dev": "webpack serve --env NODE_ENV=development --mode development",
 },
 //...
 ```

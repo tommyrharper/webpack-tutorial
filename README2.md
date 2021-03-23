@@ -3,7 +3,7 @@
 ## Start your server
 
 ```
-npm run develop // to run dev server
+npm run dev // to run dev server
 npx webpack --config webpack.config.js // to build bundle.js
 npx webpack --help // view available webpack commands
 touch postcss.config.js
@@ -158,7 +158,7 @@ ReactDOM.render(
 ## package.json
 
 - Add the following rules:
-  - The develop script
+  - The dev script
 ```JSON
 {
   "name": "react-webpack-config",
@@ -166,7 +166,7 @@ ReactDOM.render(
   "description": "",
   "main": "index.js",
   "scripts": {
-    "develop": "webpack serve --env NODE_ENV=development --mode development",
+    "dev": "webpack serve --env NODE_ENV=development --mode development",
     "test": "jest"
   },
   //...
