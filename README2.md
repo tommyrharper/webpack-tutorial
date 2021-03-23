@@ -4,7 +4,7 @@
 
 ```
 npm run develop // to run dev server
-npm i webpack-dev-server --save-dev // to build bundle.js
+npx webpack --config webpack.config.js // to build bundle.js
 npx webpack --help // view available webpack commands
 touch postcss.config.js
 ```
